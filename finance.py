@@ -64,10 +64,15 @@ while True:
     enter_category = input("Enter category: ")
     expense = {'description': expense_description, 'amount': amount_in_pence, 'category': enter_category}
     expenses.append(expense)
-        
-    add_another = input("Add another expense? (yes/no): ")
+    
+    while True:
+        add_another = input("Add another expense? (yes/no): ").lower()
+        if add_another == "yes" or add_another == "no":
+            break
+        else:
+            print("Please enter yes or no")
     if add_another == "no":
-        break
+            break
 
 category_totals = calculate_expenses_by_category(expenses)
 print("\nSpending by category:")
