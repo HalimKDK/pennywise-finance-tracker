@@ -48,12 +48,34 @@ def calculate_expenses_by_category(expenses):
 
     return category_totals
 
+while True:
+    expense_description = input("What did you buy? ")
+
+    while True:
+        
+        amount_in_pence = input("Enter amount in pence: ")
+
+        if amount_in_pence.isdigit():
+            amount_in_pence = int(amount_in_pence)
+            break
+        else:
+            print("Please enter a valid number")
+            
+    enter_category = input("Enter category: ")
+    expense = {'description': expense_description, 'amount': amount_in_pence, 'category': enter_category}
+    expenses.append(expense)
+        
+    add_another = input("Add another expense? (yes/no): ")
+    if add_another == "no":
+        break
+
 category_totals = calculate_expenses_by_category(expenses)
 print("\nSpending by category:")
 
 for category, amount in category_totals.items():
     print(f"{category}: {format_currency(amount)}")
 
+print(expenses)
 
 total_income = calculate_total_income(income)
 
@@ -65,3 +87,8 @@ print(f"Total income: {format_currency(total_income)}")
 print(f"Total expenses: {format_currency(total_expenses)}")
 print(f"Remaining balance: {format_currency(balance)}")
 
+expenses.append({
+    "description": "Cinema",
+    "amount": 1200,
+    "category": "Entertainment"
+})
