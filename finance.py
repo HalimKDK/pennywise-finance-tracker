@@ -48,52 +48,87 @@ def calculate_expenses_by_category(expenses):
 
     return category_totals
 
-while True:
-    expense_description = input("What did you buy? ")
+def view_all_expenses():
+    print("\n========== ALL EXPENSES ==========")
 
-    while True:
-        
-        amount_in_pence = input("Enter amount in pence: ")
+    for expense in expenses:
+        print(f"Description: {expense['description']}")
+        print(f"Amount: {format_currency(expense['amount'])}")
+        print(f"Category: {expense['category']}")
+        print("--------------------------")
 
-        if amount_in_pence.isdigit():
-            amount_in_pence = int(amount_in_pence)
-            break
-        else:
-            print("Please enter a valid number")
-            
-    enter_category = input("Enter category: ")
-    expense = {'description': expense_description, 'amount': amount_in_pence, 'category': enter_category}
-    expenses.append(expense)
+def add_expense():
     
-    while True:
-        add_another = input("Add another expense? (yes/no): ").lower()
-        if add_another == "yes" or add_another == "no":
+    while True:  
+        expense_description = input("What did you buy? ")
+
+        while True:
+            amount_in_pence = input("Enter amount in pence: ")
+
+            if amount_in_pence.isdigit():
+                amount_in_pence = int(amount_in_pence)
+                break
+            else:
+                print("Please enter a valid number")
+            
+        enter_category = input("Enter category: ")
+        expense = {'description': expense_description, 'amount': amount_in_pence, 'category': enter_category}
+        expenses.append(expense)
+    
+        while True:
+            add_another = input("Add another expense? (yes/no): ").lower()
+            if add_another == "yes" or add_another == "no":
+                break
+            else:
+                print("Please enter yes or no")
+        if add_another == "no":
             break
-        else:
-            print("Please enter yes or no")
-    if add_another == "no":
-            break
+        
+def view_expenses_by_category():
+    category_totals = calculate_expenses_by_category(expenses)
+    print("\n========== SPENDING BY CATEGORY ==========")
+        
+    for category, amount in category_totals.items():
+        print(f"{category}: {format_currency(amount)}")
 
-category_totals = calculate_expenses_by_category(expenses)
-print("\nSpending by category:")
+def view_financial_summary():
+    
+    total_income = calculate_total_income(income)
 
-for category, amount in category_totals.items():
-    print(f"{category}: {format_currency(amount)}")
+    total_expenses = calculate_total_expenses(expenses)
 
-print(expenses)
+    balance = calculate_balance(total_income, total_expenses)
+    
+    print("\n========== FINANCIAL SUMMARY ==========")
 
-total_income = calculate_total_income(income)
+    print(f"Total income: {format_currency(total_income)}")
+    print(f"Total expenses: {format_currency(total_expenses)}")
+    print(f"Remaining balance: {format_currency(balance)}")
 
-total_expenses = calculate_total_expenses(expenses)
 
-balance = calculate_balance(total_income, total_expenses)
+while True:
+    print("========== PENNYWISE ==========")
 
-print(f"Total income: {format_currency(total_income)}")
-print(f"Total expenses: {format_currency(total_expenses)}")
-print(f"Remaining balance: {format_currency(balance)}")
+    # Menu options
+    print("1. Add an expense")
+    print("2. View all expenses")
+    print("3. View spending by category")
+    print("4. View financial summary")
+    print("5 .Exit")
+    
+    choice = input("Please select an option: ")
+    
+    if choice == "1":
+        add_expense()
+    elif choice == "2":
+        view_all_expenses()
+    elif choice == "3":
+        view_expenses_by_category()
+    elif choice == "4":
+        view_financial_summary()
+    elif choice == "5":
+        break
+    
+    else:
+        print("Invalid option. Please select a number between 1 and 5.")
 
-expenses.append({
-    "description": "Cinema",
-    "amount": 1200,
-    "category": "Entertainment"
-})
