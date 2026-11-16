@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account - PennyWise</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    {% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endwith %}
+
+    <h1>Create your PennyWise account</h1>
+
+    <p>Start managing your finances today.</p>
+
+    <form method="POST" action="/register">
+
+        <label>Username</label>
+        <input type="text" name="username" required>
+
+        <br><br>
+
+        <label>Email address</label>
+        <input type="email" name="email" required>
+
+        <br><br>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <br><br>
+
+        <button type="submit">Create Account</button>
+
+    </form>
+
+</body>
+
+</html>

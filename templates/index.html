@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PennyWise</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+
+<body>
+
+       <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <h2>PennyWise</h2>
+
+            <nav>
+                <a href="#" class="active">Dashboard</a>
+                <a href="{{ url_for('transactions') }}">Transactions</a>
+                <a href="{{ url_for('transactions', type='income') }}">Income</a>
+                <a href="{{ url_for('transactions', type='expense') }}">Expenses</a>
+                <a href="{{ url_for('settings') }}">Settings</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger"> Logout</a>
+            </nav>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Welcome back, {{ username }}! Here's your financial overview.</p>
+                </div>
+            </header>
+
+
+            <!-- Financial Summary -->
+            <section class="summary-cards">
+
+    <div class="card">
+        <h3>Total Balance</h3>
+        <p>£{{ "%.2f"|format(total_balance / 100) }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Total Income</h3>
+        <p>£{{ "%.2f"|format(total_income / 100) }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Total Expenses</h3>
+        <p>£{{ "%.2f"|format(total_expenses / 100) }}</p>
+    </div>
+
+</section>
+
+<section class="transactions">
+    <h2>Monthly Summary — {{ month_label }}</h2>
+
+    <div class="summary-cards">
+        <div class="card">
+            <h3>Income</h3>
+            <p>£{{ "%.2f"|format(month_income / 100) }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Expenses</h3>
+            <p>£{{ "%.2f"|format(month_expenses / 100) }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Balance</h3>
+            <p>£{{ "%.2f"|format(month_balance / 100) }}</p>
+        </div>
+    </div>
+</section>
+            <section class="transactions">
+    <h2>Expenses by Category</h2>
+
+    {% if expense_breakdown %}
+    <div style="max-width: 650px;">
+    <canvas id="expenseChart"></canvas>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in expense_breakdown %}
+            <tr>
+                <td>{{ item["category"] }}</td>
+                <td>£{{ "%.2f"|format(item["total"] / 100) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No expenses recorded yet.</p>
+    {% endif %}
+</section>
+
+            <!-- Recent Transactions -->
+            <section class="transactions">
+
+                <h2>Recent Transactions</h2>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+    {% for transaction in recent_transactions %}
+    <tr>
+        <td>{{ transaction["description"] }}</td>
+        <td>{{ transaction["category"] }}</td>
+        <td>
+            {% if transaction["transaction_type"] == "income" %}+{% else %}-{% endif %}
+            £{{ "%.2f"|format(transaction["amount"] / 100) }}
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="3">No transactions yet.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+                </table>
+
+            </section>
+
+        </main>
+
+    </div>
+{% if expense_breakdown %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const expenseLabels = [
+        {% for item in expense_breakdown %}
+        {{ item["category"]|tojson }}{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    const expenseAmounts = [
+        {% for item in expense_breakdown %}
+        {{ (item["total"] / 100)|tojson }}{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    new Chart(document.getElementById("expenseChart"), {
+        type: "bar",
+        data: {
+            labels: expenseLabels,
+            datasets: [{
+                label: "Expenses (£)",
+                data: expenseAmounts,
+                backgroundColor: "#368a68",
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: value => "£" + Number(value).toFixed(2)
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: context =>
+                            "£" + Number(context.parsed.y).toFixed(2)
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+</body>
+
+</html>

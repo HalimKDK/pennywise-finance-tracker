@@ -1,71 +1,79 @@
 # PennyWise — Personal Finance Tracker
 
-A personal finance tracking web application built with Python to help users record income and expenses, monitor their spending and understand their monthly finances.
+PennyWise is a personal finance web app built with Python and Flask. Users can record income and expenses, review their transactions, and see summaries of their finances.
 
-## Project Status
+## Project status
 
-In development.
+In development. The app currently runs locally and has not been deployed.
 
 ## Features
 
-- Record, view, edit and delete income and expense transactions.
-- Categorise transactions and filter them by date.
-- Calculate total income, expenses and remaining balance.
-- Display monthly spending summaries.
-- Export transaction data to CSV.
-- Validate user input and handle errors.
+- Register, log in, and log out
+- Add, view, edit, and delete income and expense transactions
+- Keep each user’s transactions private to their account
+- View total income, expenses, and balance
+- View a monthly summary
+- View expenses by category, including a chart
+- Validate transaction details
 
-*Features will be marked as complete as they are implemented and tested.*
+## Technology
 
-## Tech Stack
+- Python and Flask
+- SQLite
+- HTML and CSS
+- JavaScript and Chart.js
 
-- **Language:** Python
-- **Web framework:** Flask
-- **Database:** SQLite
-- **Frontend:** HTML, CSS and JavaScript
-- **Testing:** pytest
-- **Version control:** Git and GitHub
+## Getting started
 
-## Getting Started
-
-### Prerequisites
+### Requirements
 
 - Python 3
 - Git
 
-### Installation
+### Install and run on Windows
 
-1. Clone the repository:
+Clone the repository, replacing the example URL with your GitHub repository URL:
 
-   `git clone YOUR_REPOSITORY_URL`
+```powershell
+git clone https://github.com/USERNAME/REPOSITORY.git
+cd pennywise-finance-tracker
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
-2. Navigate into the project directory:
+Set a random Flask session key once in PowerShell:
 
-   `cd pennywise`
+```powershell
+$pennywiseSecretKey = python -c "import secrets; print(secrets.token_hex(32))"
+[Environment]::SetEnvironmentVariable("SECRET_KEY", $pennywiseSecretKey, "User")
+$env:SECRET_KEY = $pennywiseSecretKey
+```
 
-3. Create and activate a virtual environment.
+Then start the app:
 
-4. Install dependencies:
+```powershell
+python app.py
+```
 
-   `pip install -r requirements.txt`
-
-5. Run the application using the instructions provided in the project.
+Open `http://127.0.0.1:5000` in your browser. The app uses SQLite for local data storage.
 
 ## Testing
 
-Automated tests will cover financial calculations, input validation, transaction management and application behaviour.
+The app has been manually checked for registration and login, transaction management, account separation, dashboard totals, monthly summaries, and the expense category chart. An automated test suite has not been added yet.
 
-## What I Learned
+## Future improvements
 
-This section will document the programming concepts, technical challenges and design decisions encountered during development.
-
-## Future Improvements
-
-- Add user accounts and secure authentication.
-- Introduce configurable monthly budgets.
-- Improve spending visualisations.
-- Deploy a demo application.
+- Filter transactions by date
+- Export transactions to CSV
+- Add monthly budgets
+- Add automated tests
+- Prepare the app for deployment
 
 ## Screenshots
 
-Screenshots and a demonstration link will be added once the application is ready.
+### Dashboard
+![PennyWise dashboard](screenshots/dashboard.png)
+
+### Transactions
+![PennyWise transactions](screenshots/transactions.png)
